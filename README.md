@@ -1,3 +1,3 @@
 # Template-Design-With-Validation-
-# Other repository
+# Others repository
 # https://github.com/razibh?tab=repositories

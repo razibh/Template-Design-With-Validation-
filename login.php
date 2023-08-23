@@ -1,5 +1,24 @@
 <?php
-
+require 'db.php';
+ if(isset($_POST["signin"])){
+    $email=$_POST['email'];
+    $password=$_POST['password'];
+    $result = mysqli_query($conn,"SELECT * FROM form form WHERE email = '$email'");
+    $row = mysqli_fetch_assoc($result);
+    if(mysqli_num_rows($result)>0){
+        if($password == $row["password"]){
+            $_SESSION["signin"]=true;
+            $_SESSION["id"]= $row["id"];
+            header("Location: Dashboard.html");
+    }
+    else{
+        echo '<script>alert("Wrong Password")</script>';
+      }
+    }
+    else{
+        echo '<script>alert("User not registerd")</script>';
+      }
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,13 +34,13 @@
 <body>
     <div class="container">
       <h2 class="head">SignIn</h2>
-      <form action="Dashboard.html" method="post">
+      <form action="" method="post">
           <label for="email"> Email</label> 
           <input type="email" name="email" required><br>
           <label for="password">Password</label>
           <input type="password" name="password" required><br>
       
-      <button type="signin" class="btnsignin btn-primary">SignIn</button>
+      <button type="signin" name="signin" class="btnsignin btn-primary">SignIn</button>
       <p>Not have an account ? <a href="signup.php">SignUp Here</a></p>
         </form>
 

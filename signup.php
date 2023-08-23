@@ -1,19 +1,30 @@
 <?php
 session_start();
-include("db.php");
-if($_SERVER['REQUEST_METHOD']=="POST"){
+require 'db.php';
+// if($_SERVER['REQUEST_METHOD']=="POST"){
+  if(isset($_POST["submit"])){
   $fristname=$_POST['fristname'];
   $lastname=$_POST['lastname'];
   $email=$_POST['email'];
   $password=$_POST['password'];
   $conpassword=$_POST['conpassword'];
-
-  $sql = "INSERT INTO form (frist_name, last_name,email,password,confirm_password,current_time) VALUES ('$fristname', '$lastname','$email','$password', '$conpassword',' current_timestamp()')";
-  if ($conn->query($sql) === TRUE) {
-      header("Location: login.php");
-  } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
+$duplicate = mysqli_query($conn,"SELECT * FROM form  WHERE email = '$email'");
+if(mysqli_num_rows($duplicate)>0){
+  echo '<script>alert("Email Has Already Taken")</script>';
+}
+else{
+  if($password == $conpassword){
+    $query = "INSERT INTO form (id,frist_name, last_name,email,password)  
+    VALUES('','$fristname', '$lastname','$email','$password')";
+    mysqli_query($conn,$query);
+    header("Location: login.php");
+    echo '<script>alert("Registration Successfully")</script>';
   }
+  else{
+    echo '<script>alert("Password Does Not Match")</script>';
+  }
+}
+
 }
 ?>
 
@@ -28,9 +39,10 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
+
     <div class="container">
     <h2 class="head">SignUp</h2>
-    <form action="index.html" method="post">
+    <form action="" method="post">
         <label for="fristname">Frist Name</label>
         <input type="text" name="fristname" required><br>
         <label for="lastname">Last Name</label>
@@ -42,7 +54,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
         <label for="conpassword">Confirm Password</label>
         <input type="password" name="conpassword" required>
     
-    <button type="signup" class="btnsingup btn-primary">SignUp</button> <br><br>
+    <button type="submit" name="submit" class="btnsingup btn-primary">SignUp</button> <br><br>
     <a href="" >Terms & Condition</a> and <a href="">Policy & Privacy</a>
     <p>Already have an account ? <a href="login.php">SignIn</a></p>
       </form>
