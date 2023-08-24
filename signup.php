@@ -8,14 +8,15 @@ require 'db.php';
   $email=$_POST['email'];
   $password=$_POST['password'];
   $conpassword=$_POST['conpassword'];
+  $img=$_POST['img'];
 $duplicate = mysqli_query($conn,"SELECT * FROM form  WHERE email = '$email'");
 if(mysqli_num_rows($duplicate)>0){
   echo '<script>alert("Email Has Already Taken")</script>';
 }
 else{
   if($password == $conpassword){
-    $query = "INSERT INTO form (id,frist_name, last_name,email,password)  
-    VALUES('','$fristname', '$lastname','$email','$password')";
+    $query = "INSERT INTO form (id,frist_name, last_name,email,password,img)  
+    VALUES('','$fristname', '$lastname','$email','$password','$img')";
     mysqli_query($conn,$query);
     header("Location: login.php");
     echo '<script>alert("Registration Successfully")</script>';
@@ -53,7 +54,8 @@ else{
         <input type="password" name="password" required><br>
         <label for="conpassword">Confirm Password</label>
         <input type="password" name="conpassword" required>
-    
+        <label for="img">Image</label>
+        <input type="file" name="img" required> 
     <button type="submit" name="submit" class="btnsingup btn-primary">SignUp</button> <br><br>
     <a href="" >Terms & Condition</a> and <a href="">Policy & Privacy</a>
     <p>Already have an account ? <a href="login.php">SignIn</a></p>
